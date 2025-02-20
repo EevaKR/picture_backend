@@ -44,20 +44,6 @@ jobs:
     - name: Run component tests
       run: |
         npm run test
-        
-    - name: Setup Pages
-      uses: actions/configure-pages@v3
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
-      with:
-        path: 'build/'
-    - name: Run Newman tests
-      uses: matt-ball/newman-action@master
-      with:
-        collection: 'testuser.json'
-        environment: 'DockerTest.postman_environment.json'
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v1
-      env:  
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    
+   
