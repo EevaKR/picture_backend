@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken'
 import {Response} from "express";
 
 
+//Tallenna JWT-tunnukset HttpOnly-evästeisiin localStoragen sijaan.
 
 const generateToken = (res: Response, userId: string) => {
     const jwtSecret = process.env.JWT_SECRET || "";
