@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 import  {generateToken, clearToken} from "../utils/auth"
-import {Require_id} from "mongoose";
+
 
 //tee tästä joko .ts ja korjaa user._id tai korjaa req & res
 // muokkaa myös authRouter.js

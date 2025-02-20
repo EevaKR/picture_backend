@@ -1,27 +1,30 @@
 import express, { Request, Response } from 'express';
 import authRouter from "./routes/authRouter";
-import connectUserDB from "./connections/userDB";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
 import cors from "cors";
 import path from 'path';
 import fs from 'fs';
-import dns from 'node:dns/promises';
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorMiddleware";
+import connectUserDB from "./connections/userDB";
+
+
 
 
 const app = express();
 app.use(cookieParser());
-//Setting this because of mongodb, remove if necessary
-dns.setServers(['8.8.8.8', '8.8.4.4']); // Google's public DNS servers
+
+
 
 
 const port = 3001;
 
 
 dotenv.config();
-connectUserDB();
+
+
+
 
 // Middleware
 app.use(bodyParser.json());
