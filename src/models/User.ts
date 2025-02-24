@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs"
 //MUOKKAA TÄMÄ POSTGRELLE SOPIVAKSI!!!
 
 export interface IUser extends Document {
+    _id: string;
     name: string;
     email: string;
     password: string;
@@ -26,6 +27,11 @@ const userSchema = new Schema<IUser>({
         type: String,
         required: true,
     },
+//TÄMÄ OMA LISÄYS
+    _id:{
+        type:String,
+        required: true,
+    } 
 });
 
 userSchema.pre("save", async function(next) {
