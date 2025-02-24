@@ -26,7 +26,18 @@ const authenticate = asyncHandler(
         throw new AuthenticationError("User not found");
       }
 
-      req.user=user;
+      interface UserBasicInfo {
+        _id: string;
+        name: string;
+        email: string;
+      }
+      // req.user = user; 
+      req.user = {
+      _id: user._id, // Ensure _id is a string
+      name: user.name,
+      email: user.email,
+      }
+
       next();
     } catch (e) {
       throw new AuthenticationError("Invalid token");

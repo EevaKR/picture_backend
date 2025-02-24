@@ -8,23 +8,16 @@ import fs from 'fs';
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorMiddleware";
 import connectUserDB from "./connections/userDB";
-
-
+import userRouter from "./routes/userRouter"
+import { authenticate } from './middleware/authMiddleware';
 
 
 const app = express();
 app.use(cookieParser());
 
-
-
-
 const port = 3001;
 
-
 dotenv.config();
-
-
-
 
 // Middleware
 app.use(bodyParser.json());
@@ -34,13 +27,12 @@ app.use(cors({
   credentials: true,
 }));
 
+app.use("/users", authenticate, userRouter);
+
 const users = [
   { username: 'testuser', password: 'password123' },
   { username: 'johndoe', password: 'johnspassword' }
 ];
-
-
-
 
 app.use(errorHandler);
 // Route to catch JSON-data
