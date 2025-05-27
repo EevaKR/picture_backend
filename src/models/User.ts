@@ -26,12 +26,7 @@ const userSchema = new Schema<IUser>({
     password: {
         type: String,
         required: true,
-    },
-//TÄMÄ OMA LISÄYS
-    _id:{
-        type:String,
-        required: true,
-    } 
+    }
 });
 
 userSchema.pre("save", async function(next) {

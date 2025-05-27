@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import authRouter from "./routes/authRouter";
+import imageRouter from "./routes/imageRouter";
 import dotenv from "dotenv";
 import bodyParser from 'body-parser';
 import cors from "cors";
@@ -10,23 +11,47 @@ import { errorHandler } from "./middleware/errorMiddleware";
 import connectUserDB from "./connections/userDB";
 import userRouter from "./routes/userRouter"
 import { authenticate } from './middleware/authMiddleware';
+import helmet from "helmet";
 
 
-const app = express();
-app.use(cookieParser());
-
-const port = 3001;
 
 dotenv.config();
 
-// Middleware
-app.use(bodyParser.json());
-app.use(authRouter);
+interface UserBasicInfo {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserBasicInfo | null;
+    }
+  }
+}
+
+
+const app = express();
+const port = 3001;
+
+app.use(helmet());
+
 app.use(cors({
   origin: "http://localhost:3000",
   credentials: true,
 }));
 
+app.use(cookieParser());
+
+
+// Middleware
+app.use(bodyParser.json()); // To recognize the req obj as a json obj
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+app.use(authRouter);
+app.use("/images", imageRouter);
 app.use("/users", authenticate, userRouter);
 
 // Health check endpoint for Docker
@@ -38,14 +63,21 @@ app.get('/health', (req: Request, res: Response) => {
   });
 });
 
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+=======
 const users = [
   { username: 'testuser', password: 'password123' },
   { username: 'johndoe', password: 'johnspassword' }
 ];
 
+
 app.use(errorHandler);
 // Route to catch JSON-data
-app.get('/api/user', (req: Request, res: Response) => {
+
+
+
+/* app.get('/api/user', (req: Request, res: Response) => {
   fs.readFile('testuser.json', 'utf8', (err, data) => {
     if (err) {
       res.status(500).send('Error reading data');
@@ -63,6 +95,8 @@ app.post('/api/data', (req: Request, res: Response) => {
   });
 });
 
+*/
+
 // Serve static files from React build-folder
 app.use(express.static(path.join(__dirname, 'frontend/mydocker_ts/build')));
 
@@ -76,6 +110,9 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
+
+connectUserDB();
+=======
 
 interface UserBasicInfo {
   _id: string;
