@@ -1,18 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES6",
+    "target": "ES2020",
     "module": "CommonJS",
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true,  // Mahdollistaa JSON-tiedostojen tuonnin
-    "allowSyntheticDefaultImports": true,  // Helpottaa CommonJS-moduulien tuontia
-    "forceConsistentCasingInFileNames": true,  // Varmistaa, että tiedostonimet ovat oikein
-    "noImplicitAny": true,  // Estää implisiittisen 'any'-tyypin käytön
-    "strictNullChecks": true  // Ota huomioon 'null' ja 'undefined' tyyppitarkistuksessa
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node"
   },
-  "include": ["src"],  // Sisällytä kaikki tiedostot src-hakemistosta
-  "exclude": ["node_modules"]  // Poissulje node_modules-hakemisto
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"],
+  "ts-node": {
+    "esm": false
+  }
 }
