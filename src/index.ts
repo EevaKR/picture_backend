@@ -29,6 +29,15 @@ app.use(cors({
 
 app.use("/users", authenticate, userRouter);
 
+// Health check endpoint for Docker
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    service: 'Picture Store API'
+  });
+});
+
 const users = [
   { username: 'testuser', password: 'password123' },
   { username: 'johndoe', password: 'johnspassword' }

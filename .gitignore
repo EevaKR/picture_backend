@@ -1,4 +1,12 @@
-# Logs
+node_modules/
+
+.env
+
+build/
+
+.vscode/
+
+#Docker compose filet# Logs
 logs
 *.log
 npm-debug.log*
