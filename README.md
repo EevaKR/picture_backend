@@ -66,6 +66,8 @@ MONGODB_URI=mongodb://localhost:27017/picturestore
 - Never commit `.env` file to version control
 
 ### 4. Start the server
+
+#### Option A: Local Development
 ```bash
 # Development mode with auto-reload
 npm run dev
@@ -73,6 +75,16 @@ npm run dev
 # Production mode
 npm run build
 npm start
+```
+
+#### Option B: Docker Container
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or build and run manually
+docker build -t picture-store-api .
+docker run -p 3001:3001 --env-file .env picture-store-api
 ```
 
 The server will start at `http://localhost:3001`

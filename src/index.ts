@@ -54,6 +54,15 @@ app.use(authRouter);
 app.use("/images", imageRouter);
 app.use("/users", authenticate, userRouter);
 
+// Health check endpoint for Docker
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ 
+    status: 'OK', 
+    timestamp: new Date().toISOString(),
+    service: 'Picture Store API'
+  });
+});
+
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 

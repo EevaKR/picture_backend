@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  picture-store-api:
+    build: .
+    container_name: picture-store-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret_here_change_this_in_production}
+      - MONGODB_URI=${MONGODB_URI:-mongodb://localhost:27017/picturestore}
+    volumes:
+      # Persist uploaded images and database
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) })"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - picture-store-network
+
+  # Optional: MongoDB service (uncomment if you want local MongoDB)
+  # mongodb:
+  #   image: mongo:6-alpine
+  #   container_name: picture-store-mongo
+  #   ports:
+  #     - "27017:27017"
+  #   environment:
+  #     - MONGO_INITDB_ROOT_USERNAME=admin
+  #     - MONGO_INITDB_ROOT_PASSWORD=password123
+  #     - MONGO_INITDB_DATABASE=picturestore
+  #   volumes:
+  #     - mongodb_data:/data/db
+  #   restart: unless-stopped
+  #   networks:
+  #     - picture-store-network
+
+networks:
+  picture-store-network:
+    driver: bridge
+
+# volumes:
+#   mongodb_data:

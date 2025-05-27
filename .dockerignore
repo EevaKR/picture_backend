@@ -1,0 +1,52 @@
+# Dependencies
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# Development files
+.git
+.gitignore
+README.md
+docs/
+tests/
+
+# Build artifacts
+dist/
+build/
+
+# Runtime data
+data/
+uploads/
+*.log
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Frontend projects (not needed in backend container)
+frontend/
+myproject/
+
+# Docker files
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Postman collections (not needed in production)
+*.postman_collection.json
+*.postman_environment.json
+MyCollection
+mycollection.json
+
+# Old files
+dockerfile
