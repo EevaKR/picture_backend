@@ -4,9 +4,10 @@ FROM node:18-alpine AS builder
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files and npmrc
 COPY package*.json ./
 COPY tsconfig.json ./
+COPY .npmrc ./
 
 # Install dependencies
 RUN npm ci --only=production
@@ -27,8 +28,9 @@ RUN adduser -S nodejs -u 1001
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files and npmrc
 COPY package*.json ./
+COPY .npmrc ./
 
 # Install only production dependencies
 RUN npm ci --only=production && npm cache clean --force

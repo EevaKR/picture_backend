@@ -1,0 +1,33 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: picture-store-api
+  labels:
+    app: picture-store-api
+spec:
+  source:
+    type: Git
+    git:
+      uri: https://github.com/your-username/your-repo.git
+      ref: main
+  strategy:
+    type: Docker
+    dockerStrategy:
+      env:
+        - name: NPM_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: npm-token-secret
+              key: NPM_TOKEN
+  output:
+    to:
+      kind: ImageStreamTag
+      name: picture-store-api:latest
+  triggers:
+    - type: GitHub
+      github:
+        secret: github-webhook-secret
+    - type: Generic
+      generic:
+        secret: generic-webhook-secret
+    - type: ConfigChange
