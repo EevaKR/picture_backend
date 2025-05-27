@@ -1,0 +1,83 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: picture-store-api
+  labels:
+    app: picture-store-api
+spec:
+  replicas: 1
+  selector:
+    app: picture-store-api
+  template:
+    metadata:
+      labels:
+        app: picture-store-api
+    spec:
+      containers:
+      - name: picture-store-api
+        image: picture-store-api:latest
+        ports:
+        - containerPort: 3001
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "3001"
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: JWT_SECRET
+        - name: MONGODB_URI
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: MONGODB_URI
+        volumeMounts:
+        - name: uploads-volume
+          mountPath: /app/uploads
+        - name: data-volume
+          mountPath: /app/data
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3001
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+      volumes:
+      - name: uploads-volume
+        persistentVolumeClaim:
+          claimName: uploads-pvc
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: data-pvc
+  triggers:
+  - type: ImageChange
+    imageChangeParams:
+      automatic: true
+      containerNames:
+      - picture-store-api
+      from:
+        kind: ImageStreamTag
+        name: picture-store-api:latest
+  - type: ConfigChange
