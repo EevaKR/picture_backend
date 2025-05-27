@@ -131,18 +131,30 @@ The application supports both MongoDB and local file-based storage:
 ## 📁 Project Structure
 
 ```
-src/
-├── controllers/     # Request handlers
-├── middleware/      # Authentication, upload, error handling
-├── models/         # Database models
-├── routes/         # API routes
-├── connections/    # Database connections
-└── utils/          # Utility functions
+omadocker/
+├── src/                    # Backend source code
+│   ├── controllers/        # Request handlers
+│   ├── middleware/         # Authentication, upload, error handling
+│   ├── models/            # Database models
+│   ├── routes/            # API routes
+│   ├── connections/       # Database connections
+│   └── utils/             # Utility functions
+├── docs/                  # Documentation
+│   ├── API_DOCUMENTATION.md
+│   ├── SECURITY_SETUP.md
+│   └── REPOSITORY_STATUS.md
+├── tests/                 # Test files
+├── data/                  # Local database storage
+├── uploads/               # Uploaded images
+├── frontend/              # Frontend projects (separate)
+├── package.json           # Dependencies
+├── .env.example           # Environment template
+└── README.md              # This file
 ```
 
 ## 🧪 Testing
 
-Use the provided API documentation and examples in `API_DOCUMENTATION.md` for testing endpoints.
+Use the provided API documentation and examples in `docs/API_DOCUMENTATION.md` for testing endpoints.
 
 ## 📝 License
 
