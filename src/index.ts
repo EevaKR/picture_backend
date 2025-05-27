@@ -65,6 +65,12 @@ app.get('/health', (req: Request, res: Response) => {
 
 // Serve uploaded files statically
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+=======
+const users = [
+  { username: 'testuser', password: 'password123' },
+  { username: 'johndoe', password: 'johnspassword' }
+];
+
 
 app.use(errorHandler);
 // Route to catch JSON-data
@@ -104,4 +110,20 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
+
 connectUserDB();
+=======
+
+interface UserBasicInfo {
+  _id: string;
+  name: string;
+  email: string;
+}
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: UserBasicInfo | null;
+    }
+  }
+}
