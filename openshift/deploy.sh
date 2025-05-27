@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Rahti Deployment Script for Picture Store API
-# Usage: ./deploy.sh [npm-token] [jwt-secret] [mongodb-uri]
+# Usage: ./deploy.sh [jwt-secret] [mongodb-uri]
 
 set -e
 
@@ -26,15 +26,10 @@ PROJECT=$(oc project -q)
 echo "📁 Current project: $PROJECT"
 
 # Get parameters
-NPM_TOKEN=${1:-""}
-JWT_SECRET=${2:-""}
-MONGODB_URI=${3:-""}
+JWT_SECRET=${1:-""}
+MONGODB_URI=${2:-""}
 
 # Prompt for missing parameters
-if [ -z "$NPM_TOKEN" ]; then
-    read -p "🔑 Enter NPM token (or press Enter to skip): " NPM_TOKEN
-fi
-
 if [ -z "$JWT_SECRET" ]; then
     read -p "🔐 Enter JWT secret (64 characters recommended): " JWT_SECRET
 fi
@@ -51,7 +46,6 @@ fi
 echo ""
 echo "📋 Deployment Summary:"
 echo "   Project: $PROJECT"
-echo "   NPM Token: ${NPM_TOKEN:+***configured***}"
 echo "   JWT Secret: ${JWT_SECRET:+***configured***}"
 echo "   MongoDB URI: ${MONGODB_URI}"
 echo ""
@@ -64,14 +58,6 @@ if [[ ! $REPLY =~ ^[Yy]$ ]]; then
 fi
 
 echo "🔧 Creating secrets..."
-
-# Create NPM token secret if provided
-if [ ! -z "$NPM_TOKEN" ]; then
-    oc create secret generic npm-token-secret \
-        --from-literal=NPM_TOKEN="$NPM_TOKEN" \
-        --dry-run=client -o yaml | oc apply -f -
-    echo "✅ NPM token secret created/updated"
-fi
 
 # Create application secrets
 oc create secret generic app-secrets \

@@ -6,25 +6,25 @@ This guide explains how to deploy the Picture Store API to Rahti (CSC's OpenShif
 
 - Rahti account and project access
 - `oc` CLI tool installed
-- NPM token for private packages (if needed)
-- Docker image built and pushed to a registry
+- Git repository with your code
 
-## 🔑 Setup NPM Token Secret
+## 🔑 Application Secrets
 
-If your project uses private npm packages, create a secret for the NPM token:
+Create secrets for sensitive environment variables that the application needs:
 
 ```bash
-# Create NPM token secret
-oc create secret generic npm-token-secret \
-  --from-literal=NPM_TOKEN=your-npm-token-here
+# Create application secrets
+oc create secret generic app-secrets \
+  --from-literal=JWT_SECRET=your-secure-jwt-secret-64-characters-long \
+  --from-literal=MONGODB_URI=mongodb://your-mongodb-connection-string
 
-# Verify the secret was created
-oc get secrets | grep npm-token
+# Verify secrets
+oc get secrets | grep app-secrets
 ```
 
 ## 🏗️ Build Configuration
 
-Create a BuildConfig that uses the NPM token:
+Create a BuildConfig for building the Docker image:
 
 ```yaml
 # buildconfig.yaml
@@ -40,13 +40,7 @@ spec:
       ref: main
   strategy:
     type: Docker
-    dockerStrategy:
-      env:
-        - name: NPM_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: npm-token-secret
-              key: NPM_TOKEN
+    dockerStrategy: {}
   output:
     to:
       kind: ImageStreamTag
@@ -217,10 +211,6 @@ oc project your-project-name
 
 2. **Create secrets:**
 ```bash
-# NPM token (if needed)
-oc create secret generic npm-token-secret \
-  --from-literal=NPM_TOKEN=your-npm-token
-
 # Application secrets
 oc create secret generic app-secrets \
   --from-literal=JWT_SECRET=your-jwt-secret \
@@ -338,8 +328,8 @@ resources:
 ## 🆘 Common Issues
 
 ### Build Fails
-- Check NPM token is correct
-- Verify .npmrc file is included
+- Check Git repository is accessible
+- Verify Dockerfile is present and correct
 - Check build logs: `oc logs -f bc/picture-store-api`
 
 ### Pod Won't Start

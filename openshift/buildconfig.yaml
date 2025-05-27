@@ -12,13 +12,7 @@ spec:
       ref: main
   strategy:
     type: Docker
-    dockerStrategy:
-      env:
-        - name: NPM_TOKEN
-          valueFrom:
-            secretKeyRef:
-              name: npm-token-secret
-              key: NPM_TOKEN
+    dockerStrategy: {}
   output:
     to:
       kind: ImageStreamTag
